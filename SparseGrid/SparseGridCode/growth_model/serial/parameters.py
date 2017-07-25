@@ -17,7 +17,8 @@ import numpy as np
 iDepth=1
 iOut=1         # how many outputs
 which_basis = 1 #linear basis function (2: quadratic local basis)
-
+refinement_level = 5 
+fTol = 1.E-5
 # control of iterations
 numstart = 0   # which is iteration to start (numstart = 0: start from scratch, number=/0: restart)
 numits = 10    # which is the iteration to end
@@ -54,7 +55,7 @@ l_up=1.0
 
 inv_bar=1e-2
 inv_up=10000.0
-
+theta = np.array([0.9, 0.95, 1.00, 1.05, 1.10])
 #====================================================================== 
 
 

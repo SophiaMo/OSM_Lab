@@ -1,6 +1,6 @@
 #======================================================================
 #
-#     This routine solves an infinite horizon growth model 
+#     Thierrorsstr(theta[itheta]).txt s routine solves an infinite horizon growth model 
 #     with dynamic programming and sparse grids
 #
 #     The model is described in Scheidegger & Bilionis (2017)
@@ -29,40 +29,34 @@ import numpy as np
 # Start with Value Function Iteration
 
 # terminal value function
-valnew=TasmanianSG.TasmanianSparseGrid()
+
 if (numstart==0):
-    valnew=interpol.sparse_grid(n_agents, iDepth)
-    valnew.write("valnew_1." + str(numstart) + ".txt") #write file to disk for restart
+    valnew = {}
+    for itheta in range(5):
+        valnew[itheta]=TasmanianSG.TasmanianSparseGrid()
+        valnew[itheta]=interpol.sparse_grid(n_agents, iDepth, itheta)
+        valnew[itheta].write("valnew_1." + str(theta[itheta])+str(numstart) + ".txt") #write file to disk for restart
 
 # value function during iteration
 else:
-    valnew.read("valnew_1." + str(numstart) + ".txt")  #write file to disk for restart
-    
-valold=TasmanianSG.TasmanianSparseGrid()
+    valnew.read("valnew_1." + str(theta[itheta])+str(numstart) + ".txt") #write file to disk for restart
+    valold = {}
+    for itheta in range(5):
+        valold[itheta]=TasmanianSG.TasmanianSparseGrid() 
 valold=valnew
 
 for i in range(numstart, numits):
-    valnew=TasmanianSG.TasmanianSparseGrid()
-    valnew=interpol_iter.sparse_grid_iter(n_agents, iDepth, valold)
-    valold=TasmanianSG.TasmanianSparseGrid()
-    valold=valnew
-    valnew.write("valnew_1." + str(i+1) + ".txt")
-    
+    valnew={}
+    for itheta in range(5):
+        valnew[itheta]=TasmanianSG.TasmanianSparseGrid()
+        valnew[itheta]=interpol_iter.sparse_grid_iter(n_agents, iDepth, valold, itheta)
+        valnew[itheta].write("valnew_"+str(theta[itheta])+ str(i+1) + ".txt")
+valold={}
+valold=valnew
 #======================================================================
 print "==============================================================="
 print " "
 print " Computation of a growth model of dimension ", n_agents ," finished after ", numits, " steps"
-print " "
-print "==============================================================="
-#======================================================================
-
-# compute errors   
-avg_err=post.ls_error(n_agents, numstart, numits, No_samples)
-
-#======================================================================
-print "==============================================================="
-print " "
-print " Errors are computed -- see errors.txt"
 print " "
 print "==============================================================="
 #======================================================================
